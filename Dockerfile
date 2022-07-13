@@ -16,6 +16,6 @@ RUN echo "This is my server" > /var/www/html/index.html \
 
   && echo "<?php phpinfo(); ?>" > /var/www/html/info.html
 
-COPY testdb.php /var/www/html/prj1
+COPY testdb.php /var/www/html/
 
 CMD apachectl -D FOREGROUND
