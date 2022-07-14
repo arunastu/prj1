@@ -14,7 +14,7 @@ EXPOSE 80
 
 RUN echo "This is my server" > /var/www/html/index.html \
 
-  && echo "<?php phpinfo(); ?>" > /var/www/html/info.html
+  && echo "<?php phpinfo(); ?>" > /var/www/html/info.php
 
 COPY testdb.php /var/www/html/
 
