@@ -19,6 +19,8 @@ services:
     restart: always
     environment:
       MARIADB_ROOT_PASSWORD: root
+    volumes:
+      - prj1-vol: /var/lib/mysql
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -32,3 +34,6 @@ services:
 
 networks:
    mynet:
+
+volumes:
+  prj1-vol:
