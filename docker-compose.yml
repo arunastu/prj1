@@ -32,6 +32,18 @@ services:
     links:
       - "mydb:db"
 
+  portainer:
+    image: portainer/portainer-ce
+    restart: always
+    ports:
+      - 8000:8000
+      - 9443:9443
+    networks:
+      - mynet
+    volumes:
+      # Here no need a mapping 'volumes' part, since it is a file
+      - /var/run/docker.sock:/var/run/docker.sock
+
 networks:
    mynet:
 
