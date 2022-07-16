@@ -20,7 +20,7 @@ services:
     environment:
       MARIADB_ROOT_PASSWORD: root
     volumes:
-      - prj1-vol: /var/lib/mysql
+      - prj1vol:/var/lib/mysql
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -36,4 +36,5 @@ networks:
    mynet:
 
 volumes:
-  prj1-vol:
+   prj1vol:
+     driver: local
