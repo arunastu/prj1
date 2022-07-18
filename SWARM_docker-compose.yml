@@ -11,6 +11,11 @@ services:
       - 8080:80
     depends_on:
       - mydb
+    deploy:
+      mode:replicated
+      replicas:2
+      restart_policy:
+        condition: on-failure
 
   mydb:
     image: mariadb
@@ -43,10 +48,6 @@ services:
     volumes:
       # Here no need a mapping 'volumes' part, since it is a file
       - /var/run/docker.sock:/var/run/docker.sock
-      
-  deploy:
-    mode:replicated
-    replicas:2
     
 networks:
    mynet:
