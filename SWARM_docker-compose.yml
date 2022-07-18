@@ -12,10 +12,7 @@ services:
     depends_on:
       - mydb
     deploy:
-      mode:replicated
-      replicas:2
-      restart_policy:
-        condition: on-failure
+      mode: global
 
   mydb:
     image: mariadb
@@ -34,8 +31,10 @@ services:
       - 8083:80
     networks:
       - mynet
-    links:
-      - "mydb:db"
+#    links:
+#      - "mydb:db"
+    environment:
+      - PMA_ARBITRARY=1
 
   portainer:
     image: portainer/portainer-ce
@@ -48,7 +47,7 @@ services:
     volumes:
       # Here no need a mapping 'volumes' part, since it is a file
       - /var/run/docker.sock:/var/run/docker.sock
-    
+
 networks:
    mynet:
 
