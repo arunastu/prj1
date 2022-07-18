@@ -1,0 +1,56 @@
+version: '3'
+
+services:
+
+  webserver:
+    image: myapa
+    restart: always
+    networks:
+      - mynet
+    ports:
+      - 8080:80
+    depends_on:
+      - mydb
+
+  mydb:
+    image: mariadb
+    networks:
+      - mynet
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+    volumes:
+      - prj1vol:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - 8083:80
+    networks:
+      - mynet
+    links:
+      - "mydb:db"
+
+  portainer:
+    image: portainer/portainer-ce
+    restart: always
+    ports:
+      - 8000:8000
+      - 9443:9443
+    networks:
+      - mynet
+    volumes:
+      # Here no need a mapping 'volumes' part, since it is a file
+      - /var/run/docker.sock:/var/run/docker.sock
+      
+  deploy:
+    mode:replicated
+    replicas:2
+    
+networks:
+   mynet:
+
+volumes:
+   prj1vol:
+     driver: local
