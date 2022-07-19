@@ -1,0 +1,67 @@
+version: '3'
+
+networks:
+  mynet:
+    driver: overlay
+
+volumes:
+   prj1vol:
+     driver: local
+
+services:
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    networks:
+      - mynet
+    ports:
+      - "8083:80"
+    environment:
+      PMA_HOST: mydb
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role==worker
+
+  myapache:
+    image: arunastu/myapa
+    networks:
+      - mynet
+    ports:
+      - "80:80"
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role==worker
+  
+  viz:
+    image: dockersamples/visualizer
+    networks:
+      - mynet
+    ports:
+      - "8080:8080"
+    deploy:
+      placement:
+        constraints:
+          - node.role==manager
+    volumes:
+      # Here no need a mapping 'volumes' part, since it is a file
+      - /var/run/docker.sock:/var/run/docker.sock
+    
+  mydb:
+    image: mariadb
+    networks:
+      - mynet
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+    volumes:
+      - prj1vol:/var/lib/mysql
+    deploy:
+      placement:
+        constraints:
+          - node.role==manager
