@@ -10,6 +10,25 @@ volumes:
 
 services:
 
+  portainer:
+    image: portainer/portainer-ce
+    networks:
+      - mynet
+    ports:
+      - "8000:80"
+      - "9443:9443"
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints:
+          - node.role==manager
+    volumes:
+      # Here no need a mapping 'volumes' part, since it is a file
+      - /var/run/docker.sock:/var/run/docker.sock
+
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     networks:
