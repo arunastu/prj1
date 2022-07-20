@@ -3,6 +3,8 @@ version: '3'
 networks:
   mynet:
     driver: overlay
+  portainer_agent_network:
+    driver: overlay
 
 volumes:
    prj1vol:
@@ -13,13 +15,14 @@ services:
   portaineragent:
     image: portainer/agent
     networks:
-      - mynet
+      - portainer_agent_network
     ports:
       - "9001:9001"
     deploy:
       mode: global
       restart_policy:
         condition: on-failure
+
     volumes:
       # Here no need a mapping 'volumes' part, since it is a file
       - /var/run/docker.sock:/var/run/docker.sock
@@ -72,7 +75,7 @@ services:
       placement:
         constraints:
           - node.role==worker
-  
+
   viz:
     image: dockersamples/visualizer
     networks:
@@ -86,7 +89,7 @@ services:
     volumes:
       # Here no need a mapping 'volumes' part, since it is a file
       - /var/run/docker.sock:/var/run/docker.sock
-    
+
   mydb:
     image: mariadb
     networks:
